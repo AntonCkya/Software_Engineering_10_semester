@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  app:
+    build: ./
+    container_name: app
+    command: python main.py
+    ports:
+      - "8000:8000"
+    networks:
+      - delivery_net
+
+networks:
+  delivery_net:
+    driver: bridge
