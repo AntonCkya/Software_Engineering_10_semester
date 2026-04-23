@@ -35,6 +35,17 @@ class DatabaseSettings(BaseSettings):
         )
 
 
+class MongoDBSettings(BaseSettings):
+    model_config = SettingsConfigDict(env_prefix="MONGODB_", env_file=".env", extra="ignore")
+
+    host: str = Field(default="localhost")
+    port: int = Field(default=27017)
+    db: str = Field(default="delivery")
+    user: str = Field(default="root")
+    password: str = Field(default="password")
+    auth_source: str = Field(default="admin")
+
+
 class ServerSettings(BaseSettings):
     model_config = SettingsConfigDict(
         env_prefix="SERVER_", env_file=".env", extra="ignore"
@@ -103,6 +114,7 @@ class Settings(BaseSettings):
 
     auth: AuthSettings = Field(default_factory=AuthSettings)
     database: DatabaseSettings = Field(default_factory=DatabaseSettings)
+    mongodb: MongoDBSettings = Field(default_factory=MongoDBSettings)
     server: ServerSettings = Field(default_factory=ServerSettings)
     app: AppSettings = Field(default_factory=AppSettings)
 

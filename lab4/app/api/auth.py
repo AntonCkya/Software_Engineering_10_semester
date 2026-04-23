@@ -7,9 +7,9 @@ from app.schemas import (
     UserResponse,
     RefreshTokenRequest,
 )
-from app.models import User
-from app.storage import PgUserRepository
-from app.api.deps import get_user_repository
+from app.models_mongo import User
+from app.storage import MongoUserRepository
+from app.api.deps import get_mongo_user_repository
 from app.auth import (
     verify_password,
     get_password_hash,
@@ -26,7 +26,7 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 )
 async def register(
     request: RegisterRequest,
-    user_repo: PgUserRepository = Depends(get_user_repository),
+    user_repo: MongoUserRepository = Depends(get_mongo_user_repository),
 ):
     check_user = await user_repo.get_by_login(request.login)
     if check_user:
@@ -62,7 +62,7 @@ async def register(
 @router.post("/login", response_model=Token)
 async def login(
     request: LoginRequest,
-    user_repo: PgUserRepository = Depends(get_user_repository),
+    user_repo: MongoUserRepository = Depends(get_mongo_user_repository),
 ):
     user = await user_repo.get_by_login(request.login)
 
@@ -84,7 +84,7 @@ async def login(
 @router.post("/refresh", response_model=Token)
 async def refresh_token(
     request: RefreshTokenRequest,
-    user_repo: PgUserRepository = Depends(get_user_repository),
+    user_repo: MongoUserRepository = Depends(get_mongo_user_repository),
 ):
     token_data = decode_token(request.refresh_token, "refresh")
 

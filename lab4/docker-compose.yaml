@@ -1,26 +1,25 @@
 version: '3.8'
 
 services:
-  postgres:
-    image: postgres:16-alpine
-    container_name: postgres_db
+  mongo:
+    image: mongo:7.0
+    container_name: mongo_db
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: delivery
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: delivery
     ports:
-      - "5432:5432"
+      - "27017:27017"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
-      - ./data.sql:/docker-entrypoint-initdb.d/02-data.sql
+      - mongo_data:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks:
+      - delivery_net
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
       interval: 10s
       timeout: 5s
       retries: 5
-    networks:
-      - delivery_net
 
   app:
     build: ./
@@ -29,19 +28,20 @@ services:
     ports:
       - "8000:8000"
     environment:
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_NAME: delivery
-      DB_USER: postgres
-      DB_PASSWORD: postgres
+      MONGODB_HOST: mongo
+      MONGODB_PORT: 27017
+      MONGODB_DB: delivery
+      MONGODB_USER: root
+      MONGODB_PASSWORD: password
+      MONGODB_AUTH_SOURCE: admin
     depends_on:
-      postgres:
+      mongo:
         condition: service_healthy
     networks:
       - delivery_net
 
 volumes:
-  postgres_data:
+  mongo_data:
 
 networks:
   delivery_net:

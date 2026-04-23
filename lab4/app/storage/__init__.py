@@ -12,6 +12,12 @@ from .pg_storage import (
     PgParcelRepository,
     PgDeliveryRepository,
 )
+from .mongo_storage import (
+    MongoDB,
+    MongoUserRepository,
+    MongoParcelRepository,
+    MongoDeliveryRepository,
+)
 
 __all__ = [
     "IUserRepository",
@@ -24,4 +30,8 @@ __all__ = [
     "PgUserRepository",
     "PgParcelRepository",
     "PgDeliveryRepository",
+    "MongoDB",
+    "MongoUserRepository",
+    "MongoParcelRepository",
+    "MongoDeliveryRepository",
 ]

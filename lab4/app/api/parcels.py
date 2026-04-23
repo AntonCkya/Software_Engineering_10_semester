@@ -1,9 +1,9 @@
 from fastapi import APIRouter, HTTPException, status, Depends
 
 from app.schemas import ParcelResponse, ParcelCreate, ParcelList
-from app.models import User, Parcel
-from app.storage import PgUserRepository, PgParcelRepository
-from app.api.deps import get_current_user, get_user_repository, get_parcel_repository
+from app.models_mongo import User, Parcel
+from app.storage import MongoUserRepository, MongoParcelRepository
+from app.api.deps import get_current_user, get_mongo_user_repository, get_mongo_parcel_repository
 
 router = APIRouter(prefix="/parcels", tags=["parcels"])
 
@@ -12,8 +12,8 @@ router = APIRouter(prefix="/parcels", tags=["parcels"])
 async def create_parcel(
     request: ParcelCreate,
     current_user: User = Depends(get_current_user),
-    user_repo: PgUserRepository = Depends(get_user_repository),
-    parcel_repo: PgParcelRepository = Depends(get_parcel_repository),
+    user_repo: MongoUserRepository = Depends(get_mongo_user_repository),
+    parcel_repo: MongoParcelRepository = Depends(get_mongo_parcel_repository),
 ):
     owner = await user_repo.get_by_id(request.owner_id)
     if not owner:
@@ -47,7 +47,7 @@ async def create_parcel(
 async def get_parcel(
     parcel_id: str,
     current_user: User = Depends(get_current_user),
-    parcel_repo: PgParcelRepository = Depends(get_parcel_repository),
+    parcel_repo: MongoParcelRepository = Depends(get_mongo_parcel_repository),
 ):
     parcel = await parcel_repo.get_by_id(parcel_id)
     if not parcel:
@@ -72,8 +72,8 @@ async def get_parcel(
 async def get_user_parcels(
     user_id: str,
     current_user: User = Depends(get_current_user),
-    user_repo: PgUserRepository = Depends(get_user_repository),
-    parcel_repo: PgParcelRepository = Depends(get_parcel_repository),
+    user_repo: MongoUserRepository = Depends(get_mongo_user_repository),
+    parcel_repo: MongoParcelRepository = Depends(get_mongo_parcel_repository),
 ):
     user = await user_repo.get_by_id(user_id)
     if not user:
@@ -106,7 +106,7 @@ async def get_user_parcels(
 async def get_parcel_by_tracking(
     tracking_number: str,
     current_user: User = Depends(get_current_user),
-    parcel_repo: PgParcelRepository = Depends(get_parcel_repository),
+    parcel_repo: MongoParcelRepository = Depends(get_mongo_parcel_repository),
 ):
     parcel = await parcel_repo.get_by_tracking_number(tracking_number)
     if not parcel:

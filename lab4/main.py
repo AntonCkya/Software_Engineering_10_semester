@@ -4,7 +4,7 @@ import uvicorn
 
 from app.api import auth_router, users_router, parcels_router, deliveries_router
 from app.config import settings
-from app.storage import Database
+from app.storage import Database, MongoDB
 
 
 def create_application() -> FastAPI:
@@ -37,10 +37,12 @@ def create_application() -> FastAPI:
             dsn=settings.database.dsn,
             echo=settings.server.debug,
         )
+        await MongoDB.connect()
 
     @app.on_event("shutdown")
     async def shutdown():
         await Database.close()
+        await MongoDB.close()
 
     return app
 

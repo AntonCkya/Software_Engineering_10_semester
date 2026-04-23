@@ -1,0 +1,311 @@
+{
+  "users": [
+    {
+      "login": "ivanov_ivan",
+      "first_name": "Иван",
+      "last_name": "Иванов",
+      "email": "ivanov@example.com",
+      "password_hash": "$2b$12$LJ3m4ys3Lk0T0RZ8oXaEYuYkZ9qJ5z3xKqV7wH0fG2cD4eF6gH8iJ",
+      "created_at": "2026-01-01T10:00:00Z",
+      "updated_at": "2026-01-01T10:00:00Z"
+    },
+    {
+      "login": "petrova_anna",
+      "first_name": "Анна",
+      "last_name": "Петрова",
+      "email": "petrova@example.com",
+      "password_hash": "$2b$12$LJ3m4ys3Lk0T0RZ8oXaEYuYkZ9qJ5z3xKqV7wH0fG2cD4eF6gH8iJ",
+      "created_at": "2026-01-02T11:30:00Z",
+      "updated_at": "2026-01-02T11:30:00Z"
+    },
+    {
+      "login": "sidorov_alex",
+      "first_name": "Александр",
+      "last_name": "Сидоров",
+      "email": "sidorov@example.com",
+      "password_hash": "$2b$12$LJ3m4ys3Lk0T0RZ8oXaEYuYkZ9qJ5z3xKqV7wH0fG2cD4eF6gH8iJ",
+      "created_at": "2026-01-03T09:15:00Z",
+      "updated_at": "2026-01-03T09:15:00Z"
+    },
+    {
+      "login": "kuznetsova_maria",
+      "first_name": "Мария",
+      "last_name": "Кузнецова",
+      "email": "kuznetsova@example.com",
+      "password_hash": "$2b$12$LJ3m4ys3Lk0T0RZ8oXaEYuYkZ9qJ5z3xKqV7wH0fG2cD4eF6gH8iJ",
+      "created_at": "2026-01-04T14:20:00Z",
+      "updated_at": "2026-01-04T14:20:00Z"
+    },
+    {
+      "login": "popov_dmitry",
+      "first_name": "Дмитрий",
+      "last_name": "Попов",
+      "email": "popov@example.com",
+      "password_hash": "$2b$12$LJ3m4ys3Lk0T0RZ8oXaEYuYkZ9qJ5z3xKqV7wH0fG2cD4eF6gH8iJ",
+      "created_at": "2026-01-05T08:45:00Z",
+      "updated_at": "2026-01-05T08:45:00Z"
+    },
+    {
+      "login": "volkova_elena",
+      "first_name": "Елена",
+      "last_name": "Волкова",
+      "email": "volkova@example.com",
+      "password_hash": "$2b$12$LJ3m4ys3Lk0T0RZ8oXaEYuYkZ9qJ5z3xKqV7wH0fG2cD4eF6gH8iJ",
+      "created_at": "2026-01-06T16:00:00Z",
+      "updated_at": "2026-01-06T16:00:00Z"
+    },
+    {
+      "login": "novikov_sergey",
+      "first_name": "Сергей",
+      "last_name": "Новиков",
+      "email": "novikov@example.com",
+      "password_hash": "$2b$12$LJ3m4ys3Lk0T0RZ8oXaEYuYkZ9qJ5z3xKqV7wH0fG2cD4eF6gH8iJ",
+      "created_at": "2026-01-07T12:30:00Z",
+      "updated_at": "2026-01-07T12:30:00Z"
+    },
+    {
+      "login": "morozova_olga",
+      "first_name": "Ольга",
+      "last_name": "Морозова",
+      "email": "morozova@example.com",
+      "password_hash": "$2b$12$LJ3m4ys3Lk0T0RZ8oXaEYuYkZ9qJ5z3xKqV7wH0fG2cD4eF6gH8iJ",
+      "created_at": "2026-01-08T10:15:00Z",
+      "updated_at": "2026-01-08T10:15:00Z"
+    },
+    {
+      "login": "lebedev_andrey",
+      "first_name": "Андрей",
+      "last_name": "Лебедев",
+      "email": "lebedev@example.com",
+      "password_hash": "$2b$12$LJ3m4ys3Lk0T0RZ8oXaEYuYkZ9qJ5z3xKqV7wH0fG2cD4eF6gH8iJ",
+      "created_at": "2026-01-09T15:45:00Z",
+      "updated_at": "2026-01-09T15:45:00Z"
+    },
+    {
+      "login": "kozlova_natalia",
+      "first_name": "Наталья",
+      "last_name": "Козлова",
+      "email": "kozlova@example.com",
+      "password_hash": "$2b$12$LJ3m4ys3Lk0T0RZ8oXaEYuYkZ9qJ5z3xKqV7wH0fG2cD4eF6gH8iJ",
+      "created_at": "2026-01-10T09:00:00Z",
+      "updated_at": "2026-01-10T09:00:00Z"
+    },
+    {
+      "login": "smirnov_pavel",
+      "first_name": "Павел",
+      "last_name": "Смирнов",
+      "email": "smirnov@example.com",
+      "password_hash": "$2b$12$LJ3m4ys3Lk0T0RZ8oXaEYuYkZ9qJ5z3xKqV7wH0fG2cD4eF6gH8iJ",
+      "created_at": "2026-01-11T11:20:00Z",
+      "updated_at": "2026-01-11T11:20:00Z"
+    },
+    {
+      "login": "vasileva_irina",
+      "first_name": "Ирина",
+      "last_name": "Васильева",
+      "email": "vasileva@example.com",
+      "password_hash": "$2b$12$LJ3m4ys3Lk0T0RZ8oXaEYuYkZ9qJ5z3xKqV7wH0fG2cD4eF6gH8iJ",
+      "created_at": "2026-01-12T14:10:00Z",
+      "updated_at": "2026-01-12T14:10:00Z"
+    }
+  ],
+  "parcels": [
+    {
+      "tracking_number": "TRK001A2B3C4D",
+      "description": "Документы",
+      "weight_kg": 0.5,
+      "dimensions": "30x20x5 см",
+      "created_at": "2026-01-15T10:00:00Z",
+      "updated_at": "2026-01-15T10:00:00Z"
+    },
+    {
+        "tracking_number": "TRK002E5F6G7H",
+      "description": "Книги",
+      "weight_kg": 3.2,
+      "dimensions": "40x30x15 см",
+      "created_at": "2026-01-16T11:30:00Z",
+      "updated_at": "2026-01-16T11:30:00Z"
+    },
+    {
+      "tracking_number": "TRK003I8J9K0L",
+      "description": "Одежда",
+      "weight_kg": 1.5,
+      "dimensions": "50x40x10 см",
+      "created_at": "2026-01-17T09:15:00Z",
+      "updated_at": "2026-01-17T09:15:00Z"
+    },
+    {
+      "tracking_number": "TRK004M1N2O3P",
+      "description": "Электроника",
+      "weight_kg": 2.0,
+      "dimensions": "35x25x10 см",
+      "created_at": "2026-01-18T14:20:00Z",
+      "updated_at": "2026-01-18T14:20:00Z"
+    },
+    {
+      "tracking_number": "TRK005Q4R5S6T",
+      "description": "Косметика",
+      "weight_kg": 0.8,
+      "dimensions": "25x20x8 см",
+      "created_at": "2026-01-19T08:45:00Z",
+      "updated_at": "2026-01-19T08:45:00Z"
+    },
+    {
+      "tracking_number": "TRK006U7V8W9X",
+      "description": "Игрушки",
+      "weight_kg": 1.2,
+      "dimensions": "45x35x20 см",
+      "created_at": "2026-01-20T16:00:00Z",
+      "updated_at": "2026-01-20T16:00:00Z"
+    },
+    {
+      "tracking_number": "TRK007Y0Z1A2B",
+      "description": "Обувь",
+      "weight_kg": 1.0,
+      "dimensions": "35x25x12 см",
+      "created_at": "2026-01-21T12:30:00Z",
+      "updated_at": "2026-01-21T12:30:00Z"
+    },
+    {
+      "tracking_number": "TRK008C3D4E5F",
+      "description": "Спорттовары",
+      "weight_kg": 5.0,
+      "dimensions": "60x40x30 см",
+      "created_at": "2026-01-22T10:15:00Z",
+      "updated_at": "2026-01-22T10:15:00Z"
+    },
+    {
+      "tracking_number": "TRK009G6H7I8J",
+      "description": "Посуда",
+      "weight_kg": 2.5,
+      "dimensions": "40x30x25 см",
+      "created_at": "2026-01-23T15:45:00Z",
+      "updated_at": "2026-01-23T15:45:00Z"
+    },
+    {
+      "tracking_number": "TRK010K9L0M1N",
+      "description": "Аксессуары",
+      "weight_kg": 0.3,
+      "dimensions": "20x15x5 см",
+      "created_at": "2026-01-24T09:00:00Z",
+      "updated_at": "2026-01-24T09:00:00Z"
+    },
+    {
+      "tracking_number": "TRK011O2P3Q4R",
+      "description": "Подарки",
+      "weight_kg": 1.8,
+      "dimensions": "35x25x15 см",
+      "created_at": "2026-01-25T11:20:00Z",
+      "updated_at": "2026-01-25T11:20:00Z"
+    },
+    {
+      "tracking_number": "TRK012S5T6U7V",
+      "description": "Канцтовары",
+      "weight_kg": 0.7,
+      "dimensions": "30x20x10 см",
+      "created_at": "2026-01-26T14:10:00Z",
+      "updated_at": "2026-01-26T14:10:00Z"
+    }
+  ],
+  "deliveries": [
+    {
+      "status": "delivered",
+      "sender_address": "г. Москва, ул. Ленина, д. 1",
+      "recipient_address": "г. Санкт-Петербург, ул. Невский пр., д. 10",
+      "estimated_delivery_date": "2026-01-20T10:00:00Z",
+      "actual_delivery_date": "2026-01-20T14:00:00Z",
+      "created_at": "2026-01-15T10:00:00Z",
+      "updated_at": "2026-01-20T14:00:00Z"
+    },
+    {
+      "status": "in_transit",
+      "sender_address": "г. Москва, ул. Ленина, д. 1",
+      "recipient_address": "г. Казань, ул. Баумана, д. 15",
+      "estimated_delivery_date": "2026-01-20T10:00:00Z",
+      "created_at": "2026-01-16T11:30:00Z",
+      "updated_at": "2026-01-16T11:30:00Z"
+    },
+    {
+      "status": "pending",
+      "sender_address": "г. Санкт-Петербург, ул. Невский пр., д. 10",
+      "recipient_address": "г. Новосибирск, ул. Красный пр., д. 20",
+      "estimated_delivery_date": "2026-01-26T10:00:00Z",
+      "created_at": "2026-01-17T09:15:00Z",
+      "updated_at": "2026-01-17T09:15:00Z"
+    },
+    {
+      "status": "in_transit",
+      "sender_address": "г. Казань, ул. Баумана, д. 15",
+      "recipient_address": "г. Екатеринбург, ул. Малышева, д. 5",
+      "estimated_delivery_date": "2026-01-23T10:00:00Z",
+      "created_at": "2026-01-18T14:20:00Z",
+      "updated_at": "2026-01-18T14:20:00Z"
+    },
+    {
+      "status": "pending",
+      "sender_address": "г. Новосибирск, ул. Красный пр., д. 20",
+      "recipient_address": "г. Самара, ул. Ленинградская, д. 8",
+      "estimated_delivery_date": "2026-01-26T10:00:00Z",
+      "created_at": "2026-01-19T08:45:00Z",
+      "updated_at": "2026-01-19T08:45:00Z"
+    },
+    {
+      "status": "delivered",
+      "sender_address": "г. Екатеринбург, ул. Малышева, д. 5",
+      "recipient_address": "г. Нижний Новгород, ул. Большая Покровская, д. 12",
+      "estimated_delivery_date": "2026-01-25T10:00:00Z",
+      "actual_delivery_date": "2026-01-24T12:00:00Z",
+      "created_at": "2026-01-20T16:00:00Z",
+      "updated_at": "2026-01-24T12:00:00Z"
+    },
+    {
+      "status": "in_transit",
+      "sender_address": "г. Самара, ул. Ленинградская, д. 8",
+      "recipient_address": "г. Ростов-на-Дону, ул. Большая Садовая, д. 25",
+      "estimated_delivery_date": "2026-01-27T10:00:00Z",
+      "created_at": "2026-01-21T12:30:00Z",
+      "updated_at": "2026-01-21T12:30:00Z"
+    },
+    {
+      "status": "pending",
+      "sender_address": "г. Нижний Новгород, ул. Большая Покровская, д. 12",
+      "recipient_address": "г. Уфа, ул. Ленина, д. 30",
+      "estimated_delivery_date": "2026-01-29T10:00:00Z",
+      "created_at": "2026-01-22T10:15:00Z",
+      "updated_at": "2026-01-22T10:15:00Z"
+    },
+    {
+      "status": "cancelled",
+      "sender_address": "г. Ростов-на-Дону, ул. Большая Садовая, д. 25",
+      "recipient_address": "г. Омск, ул. Ленина, д. 18",
+      "estimated_delivery_date": "2026-01-28T10:00:00Z",
+      "created_at": "2026-01-23T15:45:00Z",
+      "updated_at": "2026-01-25T09:00:00Z"
+    },
+    {
+      "status": "delivered",
+      "sender_address": "г. Уфа, ул. Ленина, д. 30",
+      "recipient_address": "г. Челябинск, ул. Кирова, д. 22",
+      "estimated_delivery_date": "2026-01-27T10:00:00Z",
+      "actual_delivery_date": "2026-01-26T16:00:00Z",
+      "created_at": "2026-01-24T09:00:00Z",
+      "updated_at": "2026-01-26T16:00:00Z"
+    },
+    {
+      "status": "pending",
+      "sender_address": "г. Омск, ул. Ленина, д. 18",
+      "recipient_address": "г. Воронеж, ул. Кольцовская, д. 7",
+      "estimated_delivery_date": "2026-01-30T10:00:00Z",
+      "created_at": "2026-01-25T11:20:00Z",
+      "updated_at": "2026-01-25T11:20:00Z"
+    },
+    {
+      "status": "in_transit",
+      "sender_address": "г. Челябинск, ул. Кирова, д. 22",
+      "recipient_address": "г. Москва, ул. Ленина, д. 1",
+      "estimated_delivery_date": "2026-01-28T10:00:00Z",
+      "created_at": "2026-01-26T14:10:00Z",
+      "updated_at": "2026-01-26T14:10:00Z"
+    }
+  ]
+}

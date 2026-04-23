@@ -1,9 +1,9 @@
 from fastapi import APIRouter, HTTPException, status, Depends
 
 from app.schemas import UserResponse, UserList, UserSearchByMaskRequest
-from app.models import User
-from app.storage import PgUserRepository
-from app.api.deps import get_current_user, get_user_repository
+from app.models_mongo import User
+from app.storage import MongoUserRepository
+from app.api.deps import get_current_user, get_mongo_user_repository
 
 router = APIRouter(prefix="/users", tags=["users"])
 
@@ -11,7 +11,7 @@ router = APIRouter(prefix="/users", tags=["users"])
 @router.get("/login/{login}", response_model=UserResponse)
 async def get_user_by_login(
     login: str,
-    user_repo: PgUserRepository = Depends(get_user_repository),
+    user_repo: MongoUserRepository = Depends(get_mongo_user_repository),
 ):
     user = await user_repo.get_by_login(login)
     if not user:
@@ -34,7 +34,7 @@ async def get_user_by_login(
 @router.post("/search", response_model=UserList)
 async def search_users_by_name_mask(
     request: UserSearchByMaskRequest,
-    user_repo: PgUserRepository = Depends(get_user_repository),
+    user_repo: MongoUserRepository = Depends(get_mongo_user_repository),
 ):
     if not request.first_name_mask and not request.last_name_mask:
         raise HTTPException(

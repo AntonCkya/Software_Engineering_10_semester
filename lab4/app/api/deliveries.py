@@ -1,13 +1,13 @@
 from fastapi import APIRouter, HTTPException, status, Depends
 
 from app.schemas import DeliveryResponse, DeliveryCreate, DeliveryList
-from app.models import User, Delivery, DeliveryStatus
-from app.storage import PgUserRepository, PgParcelRepository, PgDeliveryRepository
+from app.models_mongo import User, Delivery, DeliveryStatus
+from app.storage import MongoUserRepository, MongoParcelRepository, MongoDeliveryRepository
 from app.api.deps import (
     get_current_user,
-    get_user_repository,
-    get_parcel_repository,
-    get_delivery_repository,
+    get_mongo_user_repository,
+    get_mongo_parcel_repository,
+    get_mongo_delivery_repository,
 )
 
 router = APIRouter(prefix="/deliveries", tags=["deliveries"])
@@ -17,9 +17,9 @@ router = APIRouter(prefix="/deliveries", tags=["deliveries"])
 async def create_delivery(
     request: DeliveryCreate,
     current_user: User = Depends(get_current_user),
-    user_repo: PgUserRepository = Depends(get_user_repository),
-    parcel_repo: PgParcelRepository = Depends(get_parcel_repository),
-    delivery_repo: PgDeliveryRepository = Depends(get_delivery_repository),
+    user_repo: MongoUserRepository = Depends(get_mongo_user_repository),
+    parcel_repo: MongoParcelRepository = Depends(get_mongo_parcel_repository),
+    delivery_repo: MongoDeliveryRepository = Depends(get_mongo_delivery_repository),
 ):
     if request.sender_id != current_user.id:
         raise HTTPException(
@@ -85,7 +85,7 @@ async def create_delivery(
 async def get_delivery(
     delivery_id: str,
     current_user: User = Depends(get_current_user),
-    delivery_repo: PgDeliveryRepository = Depends(get_delivery_repository),
+    delivery_repo: MongoDeliveryRepository = Depends(get_mongo_delivery_repository),
 ):
     delivery = await delivery_repo.get_by_id(delivery_id)
     if not delivery:
@@ -112,8 +112,8 @@ async def get_delivery(
 async def get_deliveries_by_sender(
     sender_id: str,
     current_user: User = Depends(get_current_user),
-    user_repo: PgUserRepository = Depends(get_user_repository),
-    delivery_repo: PgDeliveryRepository = Depends(get_delivery_repository),
+    user_repo: MongoUserRepository = Depends(get_mongo_user_repository),
+    delivery_repo: MongoDeliveryRepository = Depends(get_mongo_delivery_repository),
 ):
     sender = await user_repo.get_by_id(sender_id)
     if not sender:
@@ -149,8 +149,8 @@ async def get_deliveries_by_sender(
 async def get_deliveries_by_recipient(
     recipient_id: str,
     current_user: User = Depends(get_current_user),
-    user_repo: PgUserRepository = Depends(get_user_repository),
-    delivery_repo: PgDeliveryRepository = Depends(get_delivery_repository),
+    user_repo: MongoUserRepository = Depends(get_mongo_user_repository),
+    delivery_repo: MongoDeliveryRepository = Depends(get_mongo_delivery_repository),
 ):
     recipient = await user_repo.get_by_id(recipient_id)
     if not recipient:
