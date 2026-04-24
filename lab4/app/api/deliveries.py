@@ -1,7 +1,11 @@
+import uuid
+
 from fastapi import APIRouter, HTTPException, status, Depends
 
 from app.schemas import DeliveryResponse, DeliveryCreate, DeliveryList
-from app.models_mongo import User, Delivery, DeliveryStatus
+from app.models.user_mongo import User
+from app.models.delivery_mongo import Delivery
+from app.models import DeliveryStatus
 from app.storage import MongoUserRepository, MongoParcelRepository, MongoDeliveryRepository
 from app.api.deps import (
     get_current_user,
@@ -55,6 +59,7 @@ async def create_delivery(
         )
 
     delivery = Delivery(
+        id=str(uuid.uuid4()),
         sender_id=request.sender_id,
         recipient_id=request.recipient_id,
         parcel_id=request.parcel_id,

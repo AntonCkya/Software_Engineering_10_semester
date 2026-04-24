@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, status, Depends
 
 from app.schemas import UserResponse, UserList, UserSearchByMaskRequest
-from app.models_mongo import User
+from app.models.user_mongo import User
 from app.storage import MongoUserRepository
 from app.api.deps import get_current_user, get_mongo_user_repository
 

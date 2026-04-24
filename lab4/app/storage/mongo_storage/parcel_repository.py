@@ -17,25 +17,25 @@ class MongoParcelRepository(IParcelRepository):
     async def create(self, parcel: Parcel) -> Parcel:
         """Создать новую посылку"""
         doc = parcel.to_mongo()
-        result = await self.collection.insert_one(doc)
+        result = self.collection.insert_one(doc)
         parcel.id = str(result.inserted_id)
         return parcel
 
     async def get_by_id(self, parcel_id: str) -> Optional[Parcel]:
         """Получить посылку по ID"""
-        doc = await self.collection.find_one({"_id": parcel_id})
+        doc = self.collection.find_one({"_id": parcel_id})
         if doc:
             return Parcel.from_mongo(doc)
         return None
 
     async def get_by_tracking_number(self, tracking_number: str) -> Optional[Parcel]:
         """Получить посылку по трек-номеру"""
-        doc = await self.collection.find_one({"tracking_number": tracking_number})
+        doc = self.collection.find_one({"tracking_number": tracking_number})
         if doc:
             return Parcel.from_mongo(doc)
         return None
 
     async def get_by_owner_id(self, owner_id: str) -> List[Parcel]:
         """Получить все посылки пользователя"""
-        docs = await self.collection.find({"owner_id": owner_id}).to_list(length=None)
+        docs = self.collection.find({"owner_id": owner_id}).to_list(length=None)
         return [Parcel.from_mongo(doc) for doc in docs]

@@ -1,7 +1,10 @@
+import uuid
+
 from fastapi import APIRouter, HTTPException, status, Depends
 
 from app.schemas import ParcelResponse, ParcelCreate, ParcelList
-from app.models_mongo import User, Parcel
+from app.models.user_mongo import User
+from app.models.parcel_mongo import Parcel
 from app.storage import MongoUserRepository, MongoParcelRepository
 from app.api.deps import get_current_user, get_mongo_user_repository, get_mongo_parcel_repository
 
@@ -23,8 +26,10 @@ async def create_parcel(
         )
 
     parcel = Parcel(
+        id=str(uuid.uuid4()),
         owner_id=request.owner_id,
         description=request.description,
+        tracking_number=f"TRK{uuid.uuid4().hex[:12].upper()}",
         weight_kg=request.weight_kg,
         dimensions=request.dimensions,
     )

@@ -9,7 +9,7 @@ from app.storage import (
     MongoParcelRepository,
     MongoDeliveryRepository,
 )
-from app.models_mongo import User as MongoUser
+from app.models.user_mongo import User as MongoUser
 
 security = HTTPBearer()
 

@@ -13,7 +13,7 @@
 ### Структура документа:
 ```javascript
 {
-  _id: ObjectId("..."),
+  _id: UUID4("..."),
   login: String,
   first_name: String,
   last_name: String,
@@ -27,7 +27,7 @@
 ### Поля:
 | Поле | Тип | Обязательное | Описание |
 |------|-----|--------------|----------|
-| `_id` | ObjectId | Да | Уникальный идентификатор (автоматически генерируется) |
+| `_id` | UUID4 | Да | Уникальный идентификатор (автоматически генерируется) |
 | `login` | String | Да | Логин пользователя, уникальный |
 | `first_name` | String | Да | Имя пользователя |
 | `last_name` | String | Да | Фамилия пользователя |
@@ -55,8 +55,8 @@
 ### Структура документа:
 ```javascript
 {
-  _id: ObjectId("..."),
-  owner_id: ObjectId,
+  _id: UUID4("..."),
+  owner_id: UUID4,
   tracking_number: String,
   description: String,
   weight_kg: Number,
@@ -69,8 +69,8 @@
 ### Поля:
 | Поле | Тип | Обязательное | Описание |
 |------|-----|--------------|----------|
-| `_id` | ObjectId | Да | Уникальный идентификатор |
-| `owner_id` | ObjectId | Да | Ссылка на пользователя (внешний ключ на users._id) |
+| `_id` | UUID4 | Да | Уникальный идентификатор |
+| `owner_id` | UUID4 | Да | Ссылка на пользователя (внешний ключ на users._id) |
 | `tracking_number` | String | Да | Уникальный трек-номер |
 | `description` | String | Да | Описание посылки |
 | `weight_kg` | Number | Да | Вес в килограммах (>= 0) |
@@ -84,7 +84,7 @@
 - `tracking_number` (unique)
 
 ### Обоснование выбора между embedded/references:
-- **owner_id** — используем **reference** (ObjectId), так как:
+- **owner_id** — используем **reference** (UUID4), так как:
   - Пользователь может иметь множество посылок (много к одному)
   - При удалении пользователя посылки должны быть удалены (CASCADE) — это легко реализуется через application-level логику в MongoDB
   - Ссылка на пользователя не меняется часто
@@ -97,10 +97,10 @@
 ### Структура документа:
 ```javascript
 {
-  _id: ObjectId("..."),
-  sender_id: ObjectId,
-  recipient_id: ObjectId,
-  parcel_id: ObjectId,
+  _id: UUID4("..."),
+  sender_id: UUID4,
+  recipient_id: UUID4,
+  parcel_id: UUID4,
   status: String,
   sender_address: String,
   recipient_address: String,
@@ -114,10 +114,10 @@
 ### Поля:
 | Поле | Тип | Обязательное | Описание |
 |------|-----|--------------|----------|
-| `_id` | ObjectId | Да | Уникальный идентификатор |
-| `sender_id` | ObjectId | Да | Ссылка на отправителя (users._id) |
-| `recipient_id` | ObjectId | Да | Ссылка на получателя (users._id) |
-| `parcel_id` | ObjectId | Да | Ссылка на посылку (parcels._id) |
+| `_id` | UUID4 | Да | Уникальный идентификатор |
+| `sender_id` | UUID4 | Да | Ссылка на отправителя (users._id) |
+| `recipient_id` | UUID4 | Да | Ссылка на получателя (users._id) |
+| `parcel_id` | UUID4 | Да | Ссылка на посылку (parcels._id) |
 | `status` | String | Да | Статус доставки: 'pending', 'in_transit', 'delivered', 'cancelled' |
 | `sender_address` | String | Да | Адрес отправителя |
 | `recipient_address` | String | Да | Адрес получателя |
@@ -134,7 +134,7 @@
 - `status` + `created_at` (составной для сортировки по статусу)
 
 ### Обоснование выбора между embedded/references:
-- **sender_id, recipient_id, parcel_id** — используем **references** (ObjectId), так как:
+- **sender_id, recipient_id, parcel_id** — используем **references** (UUID4), так как:
   - Один пользователь может быть отправителем или получателем множества доставок
   - Одна посылка может участвовать в нескольких доставках (хотя в логике приложения это ограничено)
   - Ссылки не меняются часто
@@ -147,8 +147,8 @@
 | Аспект | PostgreSQL (ЛР3) | MongoDB (ЛР4) |
 |--------|------------------|---------------|
 | Тип БД | Реляционная | Документная |
-| Ключи | UUID (string) | ObjectId |
-| Внешние ключи | Синтаксис SQL (FOREIGN KEY) | Reference (ObjectId) + application logic |
+| Ключи | UUID (string) | UUID4 |
+| Внешние ключи | Синтаксис SQL (FOREIGN KEY) | Reference (UUID4) + application logic |
 | Связи | JOIN таблицы | Ссылки + $lookup в агрегации |
 | Валидация | CHECK CONSTRAINT | $jsonSchema |
 | Индексы | B-tree, GIN (trigram) | B-tree, Text index |
@@ -182,7 +182,7 @@
 ```javascript
 // Пользователь
 {
-  _id: ObjectId("..."),
+  _id: UUID4("..."),
   login: "ivanov_ivan",
   first_name: "Иван",
   last_name: "Иванов",
@@ -191,8 +191,8 @@
 
 // Посылки пользователя (ссылка на пользователя)
 {
-  _id: ObjectId("..."),
-  owner_id: ObjectId("id_ivanov"), // ссылка на пользователя
+  _id: UUID4("..."),
+  owner_id: UUID4("id_ivanov"), // ссылка на пользователя
   tracking_number: "TRK001A2B3C4D",
   ...
 }
@@ -202,10 +202,10 @@
 ```javascript
 // Доставка (ссылки на отправителя, получателя и посылку)
 {
-  _id: ObjectId("..."),
-  sender_id: ObjectId("id_ivanov"),
-  recipient_id: ObjectId("id_petrova"),
-  parcel_id: ObjectId("id_parcel_1"),
+  _id: UUID4("..."),
+  sender_id: UUID4("id_ivanov"),
+  recipient_id: UUID4("id_petrova"),
+  parcel_id: UUID4("id_parcel_1"),
   status: "delivered",
   ...
 }
@@ -215,7 +215,7 @@
 
 ## Выводы
 
-Выбрана архитектура с тремя отдельными коллекциями, связанными через ObjectId references. Такой подход:
+Выбрана архитектура с тремя отдельными коллекциями, связанными через UUID4 references. Такой подход:
 
 - Сохраняет гибкость MongoDB
 - Позволяет легко масштабировать каждую коллекцию
@@ -224,6 +224,6 @@
 - Позволяет использовать текстовый поиск для удобного поиска пользователей по маске
 
 Для поддержания целостности данных в приложении реализованы:
-1. Валидация ObjectId перед созданием ссылок
+1. Валидация UUID4 перед созданием ссылок
 2. Каскадное удаление на уровне приложения
 3. Проверка существования ссылаемых документов перед созданием записей

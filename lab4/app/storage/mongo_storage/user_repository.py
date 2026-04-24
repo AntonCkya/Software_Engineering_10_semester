@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import List, Optional, Any
 
-from app.models_mongo import User
+from app.models.user_mongo import User
 from app.storage.repositories import IUserRepository
 
 class MongoUserRepository(IUserRepository):
@@ -17,20 +17,21 @@ class MongoUserRepository(IUserRepository):
     async def create(self, user: User) -> User:
         """Создать нового пользователя"""
         doc = user.to_mongo()
-        result = await self.collection.insert_one(doc)
+        result = self.collection.insert_one(doc)
         user.id = str(result.inserted_id)
         return user
 
     async def get_by_id(self, user_id: str) -> Optional[User]:
         """Получить пользователя по ID"""
-        doc = await self.collection.find_one({"_id": user_id})
+        doc = self.collection.find_one({"_id": user_id})
+        print(doc)
         if doc:
             return User.from_mongo(doc)
         return None
 
     async def get_by_login(self, login: str) -> Optional[User]:
         """Получить пользователя по логину"""
-        doc = await self.collection.find_one({"login": login})
+        doc = self.collection.find_one({"login": login})
         if doc:
             return User.from_mongo(doc)
         return None
@@ -55,5 +56,5 @@ class MongoUserRepository(IUserRepository):
         elif len(conditions) == 2:
             query = {"$and": conditions}
 
-        docs = await self.collection.find(query).sort([("last_name", 1), ("first_name", 1)]).to_list(length=None)
+        docs = self.collection.find(query).sort([("last_name", 1), ("first_name", 1)]).to_list(length=None)
         return [User.from_mongo(doc) for doc in docs]

@@ -39,7 +39,7 @@ MeowMeowExpress - сервис доставки посылок на Python FastA
 ### Коллекция `parcels`
 
 Хранит информацию о посылках:
-- `owner_id` - ссылка на пользователя ( ObjectId )
+- `owner_id` - ссылка на пользователя ( UUID4 )
 - `tracking_number` - трек-номер (уникальный)
 - `description` - описание посылки
 - `weight_kg` - вес в кг (>= 0)
@@ -50,9 +50,9 @@ MeowMeowExpress - сервис доставки посылок на Python FastA
 ### Коллекция `deliveries`
 
 Хранит информацию о доставках:
-- `sender_id` - ссылка на отправителя ( ObjectId )
-- `recipient_id` - ссылка на получателя ( ObjectId )
-- `parcel_id` - ссылка на посылку ( ObjectId )
+- `sender_id` - ссылка на отправителя ( UUID4 )
+- `recipient_id` - ссылка на получателя ( UUID4 )
+- `parcel_id` - ссылка на посылку ( UUID4 )
 - `status` - статус: `pending`, `in_transit`, `delivered`, `cancelled`
 - `sender_address` - адрес отправителя
 - `recipient_address` - адрес получателя
@@ -85,13 +85,6 @@ docker ps
 docker exec -it mongo_db mongosh -u root -p password
 ```
 
-### Подключение к MongoDB через клиент (MongoDB Compass)
-
-URL подключения:
-```
-mongodb://root:password@localhost:27017
-```
-
 ### Инициализация базы данных
 
 При первом запуске Docker Compose автоматически выполнит скрипт `mongo-init.js` для создания коллекций и тестовых данных.
@@ -103,28 +96,6 @@ mongodb://root:password@localhost:27017
 После запуска `docker compose up -d`, приложение будет доступно по адресу:
 ```
 http://localhost:8000
-```
-
-### Локальный запуск
-
-1. Установите зависимости:
-```bash
-pip install -r requirements.txt
-```
-
-2. Запустите MongoDB локально (через Docker или установку):
-```bash
-docker run -d -p 27017:27017 --name mongo_db -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=password mongo:7.0
-```
-
-3. Запустите приложение:
-```bash
-python main.py
-```
-
-4. Откройте документацию:
-```
-http://localhost:8000/docs
 ```
 
 ## API Эндпоинты
@@ -170,93 +141,30 @@ http://localhost:8000/docs
 
 Также создаются 12 посылок и 12 доставок с различными статусами.
 
-## Переменные окружения
-
-### Для MongoDB
-
-| Переменная | Значение по умолчанию | Описание |
-|------------|----------------------|----------|
-| MONGODB_HOST | mongo | Хост MongoDB |
-| MONGODB_PORT | 27017 | Порт MongoDB |
-| MONGODB_DB | delivery | Имя базы данных |
-| MONGODB_USER | root | Пользователь MongoDB |
-| MONGODB_PASSWORD | password | Пароль MongoDB |
-| MONGODB_AUTH_SOURCE | admin | Источник аутентификации |
-
-### Для приложения
-
-| Переменная | Значение по умолчанию | Описание |
-|------------|----------------------|----------|
-| SERVER_HOST | 0.0.0.0 | Хост сервера |
-| SERVER_PORT | 8000 | Порт сервера |
-| SERVER_DEBUG | false | Режим отладки |
-| SERVER_RELOAD | false | Автоматическая перезагрузка |
-| SERVER_WORKERS | 1 | Количество воркеров |
-
-## Файлы проекта
-
-- `schema_design.md` - описание проектирования документной модели MongoDB
-- `data.json` - тестовые данные в формате JSON
-- `mongo-init.js` - скрипт инициализации базы данных
-- `queries.md` - примеры MongoDB запросов
-- `validation.js` - скрипт валидации схем
-- `docker-compose.yaml` - конфигурация Docker Compose
-- `Dockerfile` - Dockerfile для приложения
-- `requirements.txt` - зависимости Python
-- `main.py` - точка входа в приложение
-- `app/` - исходный код приложения
-
 ## Запуск скриптов MongoDB
 
 ### Выполнение скрипта инициализации
 
+Делать только на пустой монге, при запуске компоузом оно и так выполнится
+
 ```bash
-docker exec -i mongo_db mongosh -u root -p password < /docker-entrypoint-initdb.d/mongo-init.js
+docker exec -i mongo_db mongosh -u root -p password < mongo-init.js
 ```
 
 ### Выполнение скрипта валидации
 
 ```bash
-docker exec -it mongo_db mongosh -u root -p password delivery /docker-entrypoint-initdb.d/validation.js
+docker exec -i mongo_db mongosh -u root -p password < validation.js
 ```
 
 ### Выполнение MongoDB команд
 
 ```bash
-docker exec -it mongo_db mongosh -u root -p password delivery
+docker exec -i mongo_db mongosh -u root -p password < queries.js
 ```
 
-## Решение проблемы с подключением
-
-Если приложение не может подключиться к MongoDB:
-
-1. Проверьте статус контейнеров:
-```bash
-docker ps
-```
-
-2. Проверьте логи приложения:
-```bash
-docker logs app
-```
-
-3. Проверьте логи MongoDB:
-```bash
-docker logs mongo_db
-```
-
-4. Убедитесь, что контейнер mongo_db запущен и здоров:
-```bash
-docker inspect mongo_db --format='{{.State.Status}}'
-```
-
-## Остановка
+### Перезапуск контейнеров (если надо)
 
 ```bash
-docker compose down
-```
-
-Для остановки и удаления томов данных:
-```bash
-docker compose down -v
+docker-compose down -v && docker-compose up -d --build
 ```

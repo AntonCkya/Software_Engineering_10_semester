@@ -1,3 +1,5 @@
+import uuid
+
 from fastapi import APIRouter, HTTPException, status, Depends
 
 from app.schemas import (
@@ -7,7 +9,7 @@ from app.schemas import (
     UserResponse,
     RefreshTokenRequest,
 )
-from app.models_mongo import User
+from app.models.user_mongo import User
 from app.storage import MongoUserRepository
 from app.api.deps import get_mongo_user_repository
 from app.auth import (
@@ -36,6 +38,7 @@ async def register(
         )
 
     new_user = User(
+        id=str(uuid.uuid4()),
         login=request.login,
         first_name=request.first_name,
         last_name=request.last_name,

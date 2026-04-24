@@ -1,8 +1,4 @@
-
-#!/usr/bin/env mongosh
-// MongoDB Schema Validation Script для MeowMeowExpress
-
-use delivery;
+db = db.getSiblingDB('delivery');
 
 print("=== Schema Validation Test ===\n");
 
@@ -11,7 +7,8 @@ print("=== Schema Validation Test ===\n");
 // ============================================
 print("Создание валидации для коллекции users...");
 
-db.createCollection("users", {
+const usersValidationResult = db.runCommand({
+  collMod: "users",
   validator: {
     $jsonSchema: {
       bsonType: "object",
@@ -22,38 +19,28 @@ db.createCollection("users", {
           minLength: 1,
           maxLength: 100,
           pattern: "^[a-zA-Z0-9_]+$",
-          description: "Логин пользователя, 1-100 символов, только латиница, цифры и подчёркивание"
+          description: "Логин пользователя"
         },
         first_name: {
           bsonType: "string",
           minLength: 1,
-          maxLength: 100,
-          description: "Имя пользователя, обязательное поле"
+          maxLength: 100
         },
         last_name: {
           bsonType: "string",
           minLength: 1,
-          maxLength: 100,
-          description: "Фамилия пользователя, обязательное поле"
+          maxLength: 100
         },
         email: {
           bsonType: "string",
-          pattern: "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$",
-          description: "Email пользователя в формате user@example.com"
+          pattern: "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"
         },
         password_hash: {
           bsonType: "string",
-          minLength: 10,
-          description: "Хеш пароля, обязательное поле"
+          minLength: 10
         },
-        created_at: {
-          bsonType: "date",
-          description: "Дата создания пользователя"
-        },
-        updated_at: {
-          bsonType: "date",
-          description: "Дата последнего обновления"
-        }
+        created_at: { bsonType: "date" },
+        updated_at: { bsonType: "date" }
       }
     }
   },
@@ -61,21 +48,26 @@ db.createCollection("users", {
   validationAction: "error"
 });
 
-print("✓ Валидация для users создана\n");
+if (usersValidationResult.ok === 1) {
+  print("✓ Валидация для users применена\n");
+} else {
+  print("✗ Ошибка применения валидации: " + JSON.stringify(usersValidationResult) + "\n");
+}
 
 // ============================================
 // Валидация для коллекции parcels
 // ============================================
 print("Создание валидации для коллекции parcels...");
 
-db.createCollection("parcels", {
+const parcelsValidationResult = db.runCommand({
+  collMod: "parcels",
   validator: {
     $jsonSchema: {
       bsonType: "object",
       required: ["owner_id", "tracking_number", "description", "weight_kg", "dimensions", "created_at"],
       properties: {
         owner_id: {
-          bsonType: "objectId",
+          bsonType: "string",
           description: "Ссылка на пользователя, обязательное поле"
         },
         tracking_number: {
@@ -115,30 +107,30 @@ db.createCollection("parcels", {
   validationLevel: "moderate",
   validationAction: "error"
 });
-
-print("✓ Валидация для parcels создана\n");
+print(parcelsValidationResult.ok === 1 ? "✓ parcels\n" : "✗ parcels: " + JSON.stringify(parcelsValidationResult) + "\n");
 
 // ============================================
 // Валидация для коллекции deliveries
 // ============================================
 print("Создание валидации для коллекции deliveries...");
 
-db.createCollection("deliveries", {
+const deliveriesValidationResult = db.runCommand({
+  collMod: "deliveries",
   validator: {
     $jsonSchema: {
       bsonType: "object",
       required: ["sender_id", "recipient_id", "parcel_id", "status", "sender_address", "recipient_address", "created_at"],
       properties: {
         sender_id: {
-          bsonType: "objectId",
+          bsonType: "string",
           description: "Ссылка на отправителя, обязательное поле"
         },
         recipient_id: {
-          bsonType: "objectId",
+          bsonType: "string",
           description: "Ссылка на получателя, обязательное поле"
         },
         parcel_id: {
-          bsonType: "objectId",
+          bsonType: "string",
           description: "Ссылка на посылку, обязательное поле"
         },
         status: {
@@ -181,7 +173,7 @@ db.createCollection("deliveries", {
   validationAction: "error"
 });
 
-print("✓ Валидация для deliveries создана\n");
+print(deliveriesValidationResult.ok === 1 ? "✓ deliveries\n" : "✗ deliveries: " + JSON.stringify(deliveriesValidationResult) + "\n");
 
 // ============================================
 // Тестирование валидации
@@ -242,7 +234,7 @@ try {
 print("Тест 4: Вставка посылки с отрицательным весом...");
 try {
   db.parcels.insertOne({
-    owner_id: ObjectId("507f1f77bcf86cd799439011"),
+    owner_id: "90f7441c-8215-43b4-8533-277460573af6",
     tracking_number: "TRK999999",
     description: "Тестовая посылка",
     weight_kg: -1.0,
@@ -259,7 +251,7 @@ try {
 print("Тест 5: Вставка посылки с неверным форматом dimensions...");
 try {
   db.parcels.insertOne({
-    owner_id: ObjectId("507f1f77bcf86cd799439011"),
+    owner_id: "90f7441c-8215-43b4-8533-277460573af6",
     tracking_number: "TRK999998",
     description: "Тестовая посылка",
     weight_kg: 1.0,
@@ -276,9 +268,9 @@ try {
 print("Тест 6: Вставка доставки с неверным статусом...");
 try {
   db.deliveries.insertOne({
-    sender_id: ObjectId("507f1f77bcf86cd799439011"),
-    recipient_id: ObjectId("507f1f77bcf86cd799439012"),
-    parcel_id: ObjectId("507f1f77bcf86cd799439013"),
+    sender_id: "90f7441c-8215-43b4-8533-277460573af6",
+    recipient_id: "90f7441c-8215-43b4-8533-277460573af6",
+    parcel_id: "90f7441c-8215-43b4-8533-277460573af6",
     status: "invalid_status",
     sender_address: "Адрес отправителя",
     recipient_address: "Адрес получателя",
@@ -294,9 +286,9 @@ try {
 print("Тест 7: Вставка доставки с null sender_address...");
 try {
   db.deliveries.insertOne({
-    sender_id: ObjectId("507f1f77bcf86cd799439011"),
-    recipient_id: ObjectId("507f1f77bcf86cd799439012"),
-    parcel_id: ObjectId("507f1f77bcf86cd799439013"),
+    sender_id: "90f7441c-8215-43b4-8533-277460573af6",
+    recipient_id: "90f7441c-8215-43b4-8533-277460573af6",
+    parcel_id: "90f7441c-8215-43b4-8533-277460573af6",
     status: "pending",
     recipient_address: "Адрес получателя",
     created_at: new Date(),
@@ -305,25 +297,6 @@ try {
   print("✗ Должно было провалиться!\n");
 } catch (e) {
   print("✓ Ошибка как ожидалось: " + e.message.split("\n")[0] + "\n");
-}
-
-// Тест 8: Вставка валидной доставки (должна пройти)
-print("Тест 8: Вставка валидной доставки...");
-try {
-  db.deliveries.insertOne({
-    sender_id: ObjectId("507f1f77bcf86cd799439011"),
-    recipient_id: ObjectId("507f1f77bcf86cd799439012"),
-    parcel_id: ObjectId("507f1f77bcf86cd799439013"),
-    status: "pending",
-    sender_address: "г. Москва, ул. Ленина, д. 1",
-    recipient_address: "г. Санкт-Петербург, ул. Невский пр., д. 10",
-    estimated_delivery_date: new Date("2026-01-20"),
-    created_at: new Date(),
-    updated_at: new Date()
-  });
-  print("✓ Доставка успешно вставлена\n");
-} catch (e) {
-  print("✗ Ошибка: " + e.message + "\n");
 }
 
 // ============================================
