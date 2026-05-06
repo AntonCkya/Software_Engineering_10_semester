@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, status, Depends
+from fastapi import APIRouter, HTTPException, status, Depends, Request, Response
 
 from app.schemas import (
     Token,
@@ -17,6 +17,8 @@ from app.auth import (
     create_refresh_token,
     decode_token,
 )
+from app.rate_limit import rate_limiter
+from app.config import settings
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -85,6 +87,7 @@ async def login(
 async def refresh_token(
     request: RefreshTokenRequest,
     user_repo: PgUserRepository = Depends(get_user_repository),
+    response: Response = None,
 ):
     token_data = decode_token(request.refresh_token, "refresh")
 
@@ -103,6 +106,25 @@ async def refresh_token(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Невалидный refresh токен",
             headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    allowed, remaining, reset = rate_limiter.check_token_bucket(
+        identifier=user_id,
+        endpoint="/auth/refresh",
+        capacity=settings.rate_limit.refresh_capacity,
+        refill_rate=settings.rate_limit.refresh_refill_rate
+    )
+
+    if response:
+        response.headers["X-RateLimit-Limit"] = str(settings.rate_limit.refresh_capacity)
+        response.headers["X-RateLimit-Remaining"] = str(remaining)
+        response.headers["X-RateLimit-Reset"] = str(reset)
+
+    if not allowed:
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Слишком много запросов обновления токена. Попробуйте позже.",
+            headers={"Retry-After": str(reset)}
         )
 
     user = await user_repo.get_by_id(user_id)

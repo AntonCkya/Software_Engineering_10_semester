@@ -103,6 +103,24 @@ class CacheSettings(BaseSettings):
     enabled: bool = Field(default=True)
 
 
+class RateLimitSettings(BaseSettings):
+    model_config = SettingsConfigDict(
+        env_prefix="RATELIMIT_", env_file=".env", extra="ignore"
+    )
+
+    # Настройки рейт-лимитов для login
+    login_limit: int = Field(default=5)
+    login_window: int = Field(default=60)  # seconds
+    
+    # Настройки рейт-лимитов для register
+    register_limit: int = Field(default=3)
+    register_window: int = Field(default=3600)  # seconds
+    
+    # Настройки рейт-лимитов для refresh
+    refresh_capacity: int = Field(default=10)
+    refresh_refill_rate: float = Field(default=1/360)  # 1 token every 6 minutes (360 seconds)
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=".env", env_file_encoding="utf-8", extra="ignore"
@@ -115,6 +133,7 @@ class Settings(BaseSettings):
     server: ServerSettings = Field(default_factory=ServerSettings)
     app: AppSettings = Field(default_factory=AppSettings)
     cache: CacheSettings = Field(default_factory=CacheSettings)
+    rate_limit: RateLimitSettings = Field(default_factory=RateLimitSettings)
 
 
 @lru_cache  # чтобы 1 раз создалось
