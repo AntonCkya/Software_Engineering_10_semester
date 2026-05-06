@@ -3,27 +3,35 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from typing import Optional
 
 from app.auth import decode_token
-from app.storage import PgUserRepository, PgParcelRepository, PgDeliveryRepository
+from app.storage import PgUserRepository, PgParcelRepository, PgDeliveryRepository, CachedPgUserRepository, CachedPgParcelRepository
 from app.storage.pg_storage.database import get_db
 from app.models import User
+
+from app.config import settings
+
 from sqlalchemy.ext.asyncio import AsyncSession
 
 security = HTTPBearer()
 
 
 def get_user_repository(session: AsyncSession = Depends(get_db)) -> PgUserRepository:
+    if settings.cache.enabled:
+        return CachedPgUserRepository(session)
     return PgUserRepository(session)
 
 
 def get_parcel_repository(
     session: AsyncSession = Depends(get_db),
 ) -> PgParcelRepository:
+    if settings.cache.enabled:
+        return CachedPgParcelRepository(session)
     return PgParcelRepository(session)
 
 
 def get_delivery_repository(
     session: AsyncSession = Depends(get_db),
 ) -> PgDeliveryRepository:
+    # данные меняются потенциально слишком часто, не кэшируем
     return PgDeliveryRepository(session)
 
 

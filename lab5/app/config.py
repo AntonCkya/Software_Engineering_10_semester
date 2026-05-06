@@ -94,6 +94,15 @@ class AppSettings(BaseSettings):
         return [header.strip() for header in self.cors_allow_headers_raw.split(",")]
 
 
+class CacheSettings(BaseSettings):
+    model_config = SettingsConfigDict(
+        env_prefix="CACHE_", env_file=".env", extra="ignore"
+    )
+
+    # Параметры кэширования
+    enabled: bool = Field(default=True)
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=".env", env_file_encoding="utf-8", extra="ignore"
@@ -105,6 +114,7 @@ class Settings(BaseSettings):
     database: DatabaseSettings = Field(default_factory=DatabaseSettings)
     server: ServerSettings = Field(default_factory=ServerSettings)
     app: AppSettings = Field(default_factory=AppSettings)
+    cache: CacheSettings = Field(default_factory=CacheSettings)
 
 
 @lru_cache  # чтобы 1 раз создалось

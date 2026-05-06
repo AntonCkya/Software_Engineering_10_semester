@@ -12,6 +12,23 @@ from .pg_storage import (
     PgParcelRepository,
     PgDeliveryRepository,
 )
+from app.cache.cache_fabric import make_cached_repository
+
+CachedPgUserRepository = make_cached_repository(
+    PgUserRepository,
+    {
+        'get_by_id': {'maxsize': 100, 'ttl': 60}, # частый запрос, данные почти не меняются
+        'search_by_name_mask': {'maxsize': 1000, 'ttl': 300} # нечастый запрос, при этом довольно трудоемкий
+    }
+)
+
+CachedPgParcelRepository = make_cached_repository(
+    PgParcelRepository,
+    {
+        'get_by_id': {'maxsize': 100, 'ttl': 60}, # частый запрос, данные меняются редко
+        'get_by_tracking_number': {'maxsize': 100, 'ttl': 60} # частый запрос, данные меняются редко
+    }
+)
 
 __all__ = [
     "IUserRepository",
@@ -24,4 +41,6 @@ __all__ = [
     "PgUserRepository",
     "PgParcelRepository",
     "PgDeliveryRepository",
+    "CachedPgUserRepository",
+    "CachedPgParcelRepository",
 ]
